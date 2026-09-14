@@ -1,0 +1,41 @@
+#include <stdio.h>
+int main() {
+    int row = 0;
+    int column = 0;
+    int mycolumn = 0;
+    int myrow = 0;
+    int result;
+
+    printf("Enter column number between 0 - 9:");
+    scanf_s("%d", &mycolumn);
+    printf("\nEnter row number between 0 - 9:");
+    scanf_s("%d", &myrow);
+    
+   
+    if (mycolumn < 9 || mycolumn > 0 || myrow < 9 || myrow > 0) {
+        for (int row = -1; row <= 9; row++) {
+            for (int column = -1; column <= 9; column++) {
+                if (row == -1 && column == -1) {
+                    printf("  ");
+                }
+                else if (row == -1) {
+                    printf("%d ", column);
+                }
+                else if (column == -1) {
+                    printf("%d", row);
+                }
+                else if (column == mycolumn && row == myrow) {
+                    printf(" ■");
+                }
+                else {
+                    printf(" □");
+                }
+            }
+            printf("\n");
+       
+        } 
+    }else{
+            printf("ERROR!");
+    }
+    return 0;
+}
