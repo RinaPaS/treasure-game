@@ -8,11 +8,15 @@ int main() {
 
     printf("Enter column number between 0 - 9:");
     scanf_s("%d", &mycolumn);
+    if (mycolumn > 9 || mycolumn < 0) {
+        printf("ERROR!");
+        return 0;
+    }
     printf("\nEnter row number between 0 - 9:");
     scanf_s("%d", &myrow);
     
    
-    if (mycolumn < 9 || mycolumn > 0 || myrow < 9 || myrow > 0) {
+    if (mycolumn < 9 && mycolumn > 0 && myrow < 9 && myrow > 0) {
         for (int row = -1; row <= 9; row++) {
             for (int column = -1; column <= 9; column++) {
                 if (row == -1 && column == -1) {
@@ -35,7 +39,7 @@ int main() {
        
         } 
     }else{
-            printf("ERROR!");
+            printf("\nERROR!");
     }
     return 0;
 }
