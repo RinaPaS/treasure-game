@@ -1,0 +1,93 @@
+
+#include <stdio.h>
+int main() {
+    int row = 0;
+    int column = 0;
+    int mycolumn = 0;
+    int myrow = 0;
+    int guesscolumn = 0;
+    int guessrow = 0;
+    int i = 0;
+    /*ask for column number*/
+    printf("Enter column number between 0 - 9:");
+    if (scanf_s("%d", &mycolumn) != 1) {
+        printf("This is not a number.\n");
+        return 0;
+    }
+    /*ask for row number*/
+    printf("Enter row number between 0 - 9:");
+    if (scanf_s("%d", &myrow) != 1)
+    {
+        printf("This is not a number.\n");
+        return 0;
+    }
+    /*check if the number is in range between 0-9*/
+    if (mycolumn > 9 || mycolumn < 0 || myrow > 9 || myrow < 0) {
+        printf("ERROR! Number outside of range.");
+        return 0;
+    }
+
+    /*display the corrdinate with the treasure.*/
+    printf("\n(%d,%d)is the coordinate with the treasure.\n", mycolumn, myrow);
+    for (int i = 0; i < 20; i++) {
+        /*ask user to guess the column and row number*/
+        printf("\nEnter column number between 0 - 9:");
+        if (scanf_s("%d", &guesscolumn) != 1) {
+            printf("This is not a number.\n");
+            return 0;
+        }
+        else {
+            printf("\nEnter row number between 0 - 9:");
+            if (scanf_s("%d", &guessrow) != 1) {
+                printf("This is not a number.\n");
+                return 0;
+            }
+        }
+
+        /*check if number is in range of 0-9*/
+        if (guesscolumn > 9 || guesscolumn < 0 || guessrow > 9 || guessrow < 0) {
+            printf("ERROR! Number outside of range.");
+            return 0;
+        }
+
+        if (guesscolumn == mycolumn && guessrow == myrow) {
+            mycolumn = guesscolumn;
+            myrow = guessrow;
+            printf("あたり\n");
+            if (mycolumn < 9 && mycolumn > 0 && myrow < 9 && myrow > 0) {
+                for (int row = -1; row <= 9; row++) {
+                    for (int column = -1; column <= 9; column++) {
+                        if (row == -1 && column == -1) {
+                            printf("  ");
+                        }
+                        else if (row == -1) {
+                            printf("%d ", column);
+                        }
+                        else if (column == -1) {
+                            printf("%d", row);
+                        }
+                        else if (column == mycolumn && row == myrow) {
+                            printf(" ■");
+                        }
+                        else {
+                            printf(" □");
+                        }
+                    }
+                    printf("\n");
+                }
+                printf("\n Complete on you %d attempt.\n",i+1);
+                return(0);
+            }
+            else {
+                printf("\nERROR!");
+
+            }
+        }else if (i <19) {
+            printf("\nはずれ,try again. This was your %d/20 attempt", i + 1);
+        }else (i = 19) {
+            printf("This was your final attempt.");
+        }
+    }
+    printf("\ngame over");
+    return 0;
+}
