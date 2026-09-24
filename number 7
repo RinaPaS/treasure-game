@@ -1,0 +1,154 @@
+#include <stdio.h>
+#define TRE_COUNT 10
+
+int row = 0;
+int column = 0;
+int tre_x[10] = { 5,3,0,5,1,2,4,0,3,2};
+int tre_y[10] = { 8,9,5,9,7,8,6,1,7,5};
+int guesscolumn = 0;
+int guessrow = 0;
+int i = 0;
+int end_game = 0;
+int get_treasure;
+int get_comp[20];
+/*check that the user is entering a number in range*/
+int check_input()
+{
+    if (guesscolumn > 9 || guesscolumn < 0 ||
+        guessrow > 9 || guessrow < 0)
+    {
+        printf("ERROR! Number outside of range.\n");
+        return 0;
+    }
+
+    return 1;
+}
+
+/* check if the user found the treasure*/
+int check_treasure()
+{
+    if (guesscolumn == tre_x[10] && guessrow == tre_y[10])
+    {
+        return get_treasure = 1;
+    }
+
+    return 0;
+}
+
+/*board display*/
+void display_board()
+{
+    for (int row = -1; row <= 9; row++) {
+        for (int column = -1; column <= 9; column++) {
+            if (row == -1 && column == -1) {
+                printf("  ");
+            }
+            else if (row == -1) {
+                printf("%d ", column);
+            }
+            else if (column == -1) {
+                printf("%d", row);
+            }
+            else if (column == tre_x[9] && row == tre_y[9]) {
+                printf(" ■");
+            }
+            else {
+                printf(" □");
+            }
+        }
+        printf("\n");
+    }
+}
+
+/* display hit or miss */
+void display_judgement()
+{
+    if (check_treasure() == 1)
+    {
+        printf("あたり\n");
+
+    }
+    else
+    {
+        printf("はずれ\n");
+    }
+}
+
+/* check if game should end */
+int check_end_game()
+{
+    if (check_treasure() == 1)
+    {
+        return 0;
+    }
+
+    if (i >= 20)
+    {
+        return 1;
+    }
+
+    return 0;
+}
+
+
+/* display final result */
+void display_final_result()
+{
+    printf("game over\n");
+}
+
+int main()
+
+    /*check if the number is in range between 0-9*/
+    if (tre_x[10] > 9 || tre_x[10] < 0 || tre_y[10] > 9 || tre_y[10] < 0) {
+        printf("ERROR! Number outside of range.");
+        return 0;
+    }
+
+    /* main game loop */
+    while (end_game == 0)
+    {
+        printf("Enter guess column number between 0 - 9:");
+
+        if (scanf("%d", &tre_x[9]) != 1)
+        {
+            printf("This is not a number.\n");
+            return 0;
+        }
+
+
+        printf("Enter guess row number between 0 - 9:");
+
+        if (scanf("%d", &tre_y[9]) != 1)
+        {
+            printf("This is not a number.\n");
+            return 0;
+        }
+
+        if (check_input() == 0)
+        {
+            continue;
+        }
+
+        i++;
+
+
+        display_board();
+        /*
+        get_treasure = 0;
+        while (i < TRE_COUNT && get_treasure == 0) {
+            get_treasure = checkgettre(guesscolumn, guessrow, tre_x[i],tre_y[i],get_comp[i]);
+            if (get treasure == 1){
+            score++;
+            get comp[ i ] = 1;
+            }
+            i++
+
+        }*/
+    }
+
+    display_final_result();
+
+
+    return 0;
+}
