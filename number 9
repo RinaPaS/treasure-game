@@ -1,0 +1,253 @@
+#include <stdio.h>
+
+#define TRE_COUNT 10
+
+int row = 0;
+int column = 0;
+
+int tre_x[10];
+int tre_y[10];
+
+int guesscolumn = 0;
+int guessrow = 0;
+
+int i = 0;
+int guess_count = 0;
+
+int end_game = 0;
+int get_treasure = 0;
+
+int get_comp[10];
+
+int score = 0;
+
+
+/* QUESTION 7
+   Set treasure positions and initialise arrays
+*/
+void init_treasure(int *tre_x, int *tre_y, int *get_comp)
+{
+    tre_x[0] = 5;
+    tre_x[1] = 3;
+    tre_x[2] = 0;
+    tre_x[3] = 5;
+    tre_x[4] = 1;
+    tre_x[5] = 2;
+    tre_x[6] = 4;
+    tre_x[7] = 0;
+    tre_x[8] = 3;
+    tre_x[9] = 2;
+
+    tre_y[0] = 8;
+    tre_y[1] = 9;
+    tre_y[2] = 5;
+    tre_y[3] = 9;
+    tre_y[4] = 7;
+    tre_y[5] = 8;
+    tre_y[6] = 6;
+    tre_y[7] = 1;
+    tre_y[8] = 7;
+    tre_y[9] = 5;
+
+    for (int j = 0; j < TRE_COUNT; j++)
+    {
+        get_comp[j] = 0;
+    }
+}
+
+
+/* QUESTION 8
+   Input column and row and check that they are valid
+*/
+int input_position(int *guesscolumn, int *guessrow)
+{
+    printf("Enter guess column number between 0 - 9:");
+
+    if (scanf("%d", guesscolumn) != 1)
+    {
+        printf("This is not a number.\n");
+        return 0;
+    }
+
+
+    printf("Enter guess row number between 0 - 9:");
+
+    if (scanf("%d", guessrow) != 1)
+    {
+        printf("This is not a number.\n");
+        return 0;
+    }
+
+
+    if (*guesscolumn > 9 || *guesscolumn < 0 ||
+        *guessrow > 9 || *guessrow < 0)
+    {
+        printf("ERROR! Number outside of range.\n");
+        return 0;
+    }
+
+
+    return 1;
+}
+
+
+/* QUESTION 9
+   Compare input coordinates with treasure coordinates.
+   Treasure coordinates are passed using pointers.
+*/
+int checkgettre(int guesscolumn,
+                int guessrow,
+                int *tre_x,
+                int *tre_y,
+                int get_comp)
+{
+    if (guesscolumn == *tre_x &&
+        guessrow == *tre_y &&
+        get_comp == 0)
+    {
+        return 1;
+    }
+
+    return 0;
+}
+
+
+/* board display */
+void display_board()
+{
+    for (int row = -1; row <= 9; row++)
+    {
+        for (int column = -1; column <= 9; column++)
+        {
+            if (row == -1 && column == -1)
+            {
+                printf("  ");
+            }
+            else if (row == -1)
+            {
+                printf("%d ", column);
+            }
+            else if (column == -1)
+            {
+                printf("%d", row);
+            }
+            else if (column == guesscolumn &&
+                     row == guessrow)
+            {
+                printf(" ■");
+            }
+            else
+            {
+                printf(" □");
+            }
+        }
+
+        printf("\n");
+    }
+}
+
+
+/* display hit or miss */
+void display_judgement()
+{
+    if (get_treasure == 1)
+    {
+        printf("あたり\n");
+    }
+    else
+    {
+        printf("はずれ\n");
+    }
+}
+
+
+/* check if game should end */
+int check_end_game()
+{
+    if (score >= TRE_COUNT)
+    {
+        return 1;
+    }
+
+    if (guess_count >= 20)
+    {
+        return 1;
+    }
+
+    return 0;
+}
+
+
+/* display final result */
+void display_final_result()
+{
+    printf("game over\n");
+    printf("score = %d\n", score);
+}
+
+
+int main()
+{
+    /* QUESTION 7 */
+    init_treasure(tre_x, tre_y, get_comp);
+
+
+    /* main game loop */
+    while (end_game == 0)
+    {
+        /* QUESTION 8 */
+        if (input_position(&guesscolumn, &guessrow) == 0)
+        {
+            continue;
+        }
+
+
+        guess_count++;
+
+
+        display_board();
+
+
+        /* QUESTION 9 */
+
+        i = 0;
+        get_treasure = 0;
+
+        while (i < TRE_COUNT && get_treasure == 0)
+        {
+            get_treasure = checkgettre(
+                guesscolumn,
+                guessrow,
+                &tre_x[i],
+                &tre_y[i],
+                get_comp[i]
+            );
+
+
+            if (get_treasure == 1)
+            {
+                score++;
+                get_comp[i] = 1;
+            }
+
+
+            i++;
+        }
+
+
+        display_judgement();
+
+
+        end_game = check_end_game();
+
+
+        printf("score = %d\n", score);
+        printf("guess = %d / 20\n\n", guess_count);
+    }
+
+
+    display_final_result();
+
+
+    return 0;
+}
