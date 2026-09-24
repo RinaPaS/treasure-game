@@ -134,7 +134,7 @@ int main()
 
 
         display_board();
-        /*
+        
         get_treasure = 0;
         while (i < TRE_COUNT && get_treasure == 0) {
             get_treasure = checkgettre(guesscolumn, guessrow, tre_x[i],tre_y[i],get_comp[i]);
@@ -144,7 +144,7 @@ int main()
             }
             i++
 
-        }*/
+        
     }
 
     display_final_result();
