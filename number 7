@@ -67,7 +67,7 @@ void display_board()
             {
                 printf("%d", row);
             }
-            else if (column == tre_x[9] && row == tre_y[9])
+            else if (column == guesscolumn  && row == guessrow)
             {
                 printf(" ■");
             }
