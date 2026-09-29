@@ -1,0 +1,253 @@
+#include <stdio.h>
+#define TRE_COUNT 10
+
+/* Function prototypes */
+int treasure_check(int guess_x, int guess_y,
+                   int treasure_x, int treasure_y,
+                   int get_comp);
+
+void display_board_or_error(int input_error,
+                            int selected_x,
+                            int selected_y);
+void display_hit_or_miss(int input_error, int get_treasure);
+
+void initialize_treasure(int *tre_x,
+                         int *tre_y,
+                         int *get_comp);
+
+int input_and_validate(int *guesscolumn,
+                       int *guessrow);
+
+int check_all_treasures(int guesscolumn,
+                        int guessrow,
+                        int *tre_x,
+                        int *tre_y,
+                        int *get_comp);
+
+void update_score(int *score);
+
+int main(void)
+{
+    int guesscolumn = 0;
+    int guessrow = 0;
+    int input_error = 0;
+    int get_treasure = 0;
+    int attempt = 0;
+    int tre_x[TRE_COUNT];
+    int tre_y[TRE_COUNT];
+    int get_comp[TRE_COUNT];
+    int score = 0;
+
+    initialize_treasure(tre_x, tre_y, get_comp);
+
+    while (attempt < 20)
+    {
+        input_error = input_and_validate(
+            &guesscolumn,
+            &guessrow
+        );
+
+        attempt++;
+
+        display_board_or_error(
+            input_error,
+            guesscolumn,
+            guessrow
+        );
+
+        if (input_error == 0)
+        {
+            get_treasure = check_all_treasures(
+                guesscolumn,
+                guessrow,
+                tre_x,
+                tre_y,
+                get_comp
+            );
+        }
+        else
+        {
+            get_treasure = 0;
+        }
+
+        display_hit_or_miss(
+            input_error,
+            get_treasure
+        );
+
+        if (get_treasure == 1)
+        {
+            update_score(&score);
+        }
+
+        printf("This was your %d/20 attempt.\n", attempt);
+        printf("Your score is %d.\n", score);
+    }
+
+    return 0;
+}
+
+/* Function 2: check one treasure */
+int treasure_check(int guess_x, int guess_y,
+                   int treasure_x, int treasure_y,
+                   int get_comp)
+{
+    if (guess_x == treasure_x &&
+        guess_y == treasure_y &&
+        get_comp == 0)
+    {
+        return 1;
+    }
+
+    return 0;
+}
+
+/* Function 3: display the board or an error */
+void display_board_or_error(int input_error,
+                            int selected_x,
+                            int selected_y)
+{
+    int row;
+    int column;
+
+    if (input_error == 1)
+    {
+        printf("ERROR! Number outside of range.\n");
+        return;
+    }
+
+    for (row = -1; row <= 9; row++)
+    {
+        for (column = -1; column <= 9; column++)
+        {
+            if (row == -1 && column == -1)
+            {
+                printf("  ");
+            }
+            else if (row == -1)
+            {
+                printf("%d ", column);
+            }
+            else if (column == -1)
+            {
+                printf("%d", row);
+            }
+            else if (column == selected_x &&
+                     row == selected_y)
+            {
+                printf(" ■");
+            }
+            else
+            {
+                printf(" □");
+            }
+        }
+
+        printf("\n");
+    }
+}
+
+/* Function 4: display hit or miss */
+void display_hit_or_miss(int input_error, int get_treasure)
+{
+    if (input_error == 1)
+    {
+        return;
+    }
+
+    if (get_treasure == 1)
+    {
+        printf("あたり\n");
+    }
+    else
+    {
+        printf("はずれ\n");
+    }
+}
+
+/* Function 7: initialize the treasure arrays */
+void initialize_treasure(int *tre_x,
+                         int *tre_y,
+                         int *get_comp)
+{
+    int initial_x[TRE_COUNT] =
+        { 5, 3, 0, 5, 1, 2, 4, 0, 3, 2 };
+
+    int initial_y[TRE_COUNT] =
+        { 8, 9, 5, 9, 7, 8, 6, 1, 7, 5 };
+
+    int i;
+
+    for (i = 0; i < TRE_COUNT; i++)
+    {
+        tre_x[i] = initial_x[i];
+        tre_y[i] = initial_y[i];
+        get_comp[i] = 0;
+    }
+}
+
+/* Function 8: input and validate coordinates */
+int input_and_validate(int *guesscolumn,
+                       int *guessrow)
+{
+    printf("\nEnter column number between 0 - 9: ");
+
+    if (scanf_s("%d", guesscolumn) != 1)
+    {
+        printf("This is not a number.\n");
+        return 1;
+    }
+
+    printf("Enter row number between 0 - 9: ");
+
+    if (scanf_s("%d", guessrow) != 1)
+    {
+        printf("This is not a number.\n");
+        return 1;
+    }
+
+    if (*guesscolumn < 0 || *guesscolumn > 9 ||
+        *guessrow < 0 || *guessrow > 9)
+    {
+        return 1;
+    }
+
+    return 0;
+}
+
+/* Function 9: check all treasures */
+int check_all_treasures(int guesscolumn,
+                        int guessrow,
+                        int *tre_x,
+                        int *tre_y,
+                        int *get_comp)
+{
+    int i = 0;
+    int get_treasure = 0;
+
+    while (i < TRE_COUNT && get_treasure == 0)
+    {
+        get_treasure = treasure_check(
+            guesscolumn,
+            guessrow,
+            tre_x[i],
+            tre_y[i],
+            get_comp[i]
+        );
+
+        if (get_treasure == 1)
+        {
+            get_comp[i] = 1;
+        }
+
+        i++;
+    }
+
+    return get_treasure;
+}
+
+/* Function 10: increase the score */
+void update_score(int *score)
+{
+    (*score)++;
+}
